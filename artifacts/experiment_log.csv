@@ -1,0 +1,2 @@
+model_name,accuracy,precision,recall,f1_score,roc_auc,model_params
+LogisticRegression,0.8055358410220014,0.6572327044025157,0.5588235294117647,0.6040462427745664,0.8418610659019866,"{'C': 1.0, 'class_weight': None, 'dual': False, 'fit_intercept': True, 'intercept_scaling': 1, 'l1_ratio': 0.0, 'max_iter': 1000, 'n_jobs': None, 'penalty': 'deprecated', 'random_state': 42, 'solver': 'lbfgs', 'tol': 0.0001, 'verbose': 0, 'warm_start': False}"

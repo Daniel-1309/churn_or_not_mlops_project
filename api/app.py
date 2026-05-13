@@ -5,6 +5,16 @@ import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from prometheus_fastapi_instrumentator import Instrumentator
+from prometheus_client import Counter
+
+# Count predictions by class
+prediction_counter = Counter(
+    "churn_predictions_total",
+    "Number of predictions by class",
+    ["prediction"]
+)
+
 # --------------------------------------------------
 # Load trained pipeline
 # --------------------------------------------------
@@ -18,6 +28,9 @@ app = FastAPI(
     version="1.0.0",
     description="Predict whether a telecom customer is likely to churn."
 )
+
+# Automatically collect metrics and expose /metrics
+Instrumentator().instrument(app).expose(app)
 
 # --------------------------------------------------
 # Request schema
@@ -66,6 +79,9 @@ def predict(customer: CustomerData):
 
     # Predict probability
     probability = pipeline.predict_proba(input_df)[0][1]
+
+    # Track prediction distribution
+    prediction_counter.labels(prediction=str(int(prediction))).inc()
 
     return {
         "churn_prediction": int(prediction),
